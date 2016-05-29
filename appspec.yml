@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: ./laravel
+    destination: /var/www/html
+  - source: ./config
+    destination: /tmp/config
+hooks:
+  BeforeInstall:
+    - location: config/before_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: config/application_start.sh
+      timeout: 300
+      runas: root

@@ -1,0 +1,10 @@
+# System Files
+.DS_Store
+
+# Terraform Files
+.terraform
+.tfstate
+.tfstate.backup
+
+# User Specific Files
+ssh.cfg
