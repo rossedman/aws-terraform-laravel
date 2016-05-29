@@ -57,7 +57,7 @@ resource "aws_autoscaling_group" "web" {
   health_check_type = "${var.asg_healthcheck_type}"
   launch_configuration = "${aws_launch_configuration.as_conf.name}"
   load_balancers = ["${var.elb_id}"]
-  min_elb_capacity = "${var.asg_min_elb_capacity}"
+  #min_elb_capacity = "${var.asg_min_elb_capacity}"
   vpc_zone_identifier = ["${split(",", var.private_subnets)}"]
 
   tag {

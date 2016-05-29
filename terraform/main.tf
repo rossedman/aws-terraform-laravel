@@ -59,16 +59,51 @@ resource "aws_key_pair" "private" {
  *
  * Setup the deployment pipeline for the EC2 instaces
  *-------------------------------------------------*/
- module "codedeploy" {
-   source = "modules/codedeploy"
-   app_name = "${var.app_name}"
-   asg_id = "${module.asg.id}"
-   group_name = "web"
- }
+module "codedeploy" {
+  source = "modules/codedeploy"
+  app_name = "${var.app_name}"
+  asg_id = "${module.asg.id}"
+  group_name = "web"
+}
 
 /*--------------------------------------------------
-* Autoscaling Group
-*-------------------------------------------------*/
+ * Load Balancer
+ *-------------------------------------------------*/
+resource "aws_elb" "web_lb" {
+  cross_zone_load_balancing = true
+  subnets = ["${split(",", module.network.public_ids)}"]
+  security_groups = [
+    "${module.network.vpc_sg}",
+    "${aws_security_group.web.id}"
+  ]
+
+  listener {
+    instance_port = 80
+    instance_protocol = "http"
+    lb_port = 80
+    lb_protocol = "http"
+  }
+
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    timeout = 3
+    target = "HTTP:80/"
+    interval = 30
+  }
+
+  tags {
+    app = "${var.app_name}"
+    env = "${var.environment}"
+  }
+}
+
+/*--------------------------------------------------
+ * Autoscaling Group
+ *
+ * sets up web nodes and attaches ELB as well as
+ * security groups and userdata
+ *-------------------------------------------------*/
 module "asg" {
   source = "modules/autoscaling"
 

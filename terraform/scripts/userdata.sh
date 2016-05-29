@@ -2,6 +2,10 @@
 
 REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
 
+# alternative JQ option
+# yum install -y jq
+# curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq '.["region"]' -r
+
 # yum install -y ruby aws-cli php56
 # usermod -a -G apache ec2-user
 # chown -R root:apache /var/www
@@ -17,6 +21,7 @@ yum install -y /tmp/amazon-ssm-agent.rpm
 start amazon-ssm-agent
 
 # Install CodeDeploy Agent
-aws s3 cp s3://aws-codedeploy-$REGION/latest/install . --region $REGION
-chmod +x ./install
-./install auto
+yum install -y ruby aws-cli
+aws s3 cp s3://aws-codedeploy-$REGION/latest/install /home/ec2-user/install --region $REGION
+chmod +x /home/ec2-user/install
+/home/ec2-user/install auto
