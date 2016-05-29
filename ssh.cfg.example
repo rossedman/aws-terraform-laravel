@@ -1,0 +1,13 @@
+Host *
+    User ec2-user
+    IdentityFile ./keys/private
+    ForwardAgent yes
+    ProxyCommand ssh -i ./keys/bastion ec2-user@<bastion-ip> nc %h %p
+    ServerAliveInterval 60
+    TCPKeepAlive yes
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    VisualHostKey yes
+    ControlMaster auto
+    ControlPersist 5m
+    LogLevel debug
