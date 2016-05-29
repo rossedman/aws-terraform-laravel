@@ -27,14 +27,17 @@
         {
             "Effect": "Allow",
             "Action": [
-                "cloudwatch:PutMetricData"
+                "cloudwatch:PutMetricData",
+                "cloudwatch:GetMetricStatistics",
+                "cloudwatch:ListMetrics"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "ec2:DescribeInstanceStatus"
+                "ec2:DescribeInstanceStatus",
+                "ec2:DescribeTags"
             ],
             "Resource": "*"
         },

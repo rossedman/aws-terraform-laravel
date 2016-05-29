@@ -11,7 +11,7 @@ resource "aws_launch_configuration" "as_conf" {
     "${module.network.vpc_sg}",
     "${aws_security_group.web.id}"
   ]
-  user_data = "${file("userdata.sh")}"
+  user_data = "${file("scripts/userdata.sh")}"
   lifecycle { create_before_destroy = true }
 }
 
