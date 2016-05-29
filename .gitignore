@@ -3,8 +3,8 @@
 
 # Terraform Files
 .terraform
-.tfstate
-.tfstate.backup
+*.tfstate
+*.tfstate.backup
 
 # User Specific Files
 ssh.cfg

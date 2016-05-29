@@ -1,17 +1,50 @@
+variable "app_name" {}
+variable "asg_cooldown" {default = 120}
+variable "asg_healthcheck_type" {default = "ELB"}
+variable "asg_min" {default = 2}
+variable "asg_max" {default = 6}
+variable "asg_min_elb_capacity" {default = 2}
+variable "ec2_ami" {}
+variable "ec2_instance_type" {default = "t2.micro"}
+variable "ec2_key" {}
+variable "ec2_security_groups" {}
+variable "ec2_userdata_script" {}
+variable "elb_id" {}
+variable "environment" {}
+variable "private_subnets" {}
+
+/*--------------------------------------------------
+ * Instance Role
+ * this is a test role to see if our private instance can access S3
+ *-------------------------------------------------*/
+resource "aws_iam_role" "ec2" {
+  name = "EC2DeployRole"
+  assume_role_policy = "${file("${path.module}/ec2-role.json")}"
+}
+
+resource "aws_iam_role_policy" "ec2" {
+  name = "EC2DeployPolicy"
+  role = "${aws_iam_role.ec2.id}"
+  policy = "${file("${path.module}/ec2-policy.json")}"
+}
+
+# can you create multiple roles and attach here?
+resource "aws_iam_instance_profile" "ec2" {
+  name = "EC2DeployInstance"
+  roles = ["${aws_iam_role.ec2.name}"]
+}
+
 /*--------------------------------------------------
  * Launch Configuration
  *-------------------------------------------------*/
 resource "aws_launch_configuration" "as_conf" {
-  image_id = "${lookup(var.aws_linux_amis_ebs, var.region)}"
-  instance_type = "t2.micro"
-  key_name = "${aws_key_pair.private.id}"
+  image_id = "${var.ec2_ami}"
+  instance_type = "${var.ec2_instance_type}"
+  key_name = "${var.ec2_key}"
   associate_public_ip_address = false
   iam_instance_profile = "${aws_iam_instance_profile.ec2.id}"
-  security_groups = [
-    "${module.network.vpc_sg}",
-    "${aws_security_group.web.id}"
-  ]
-  user_data = "${file("scripts/userdata.sh")}"
+  security_groups = ["${split(",", var.ec2_security_groups)}"]
+  user_data = "${file(var.ec2_userdata_script)}"
   lifecycle { create_before_destroy = true }
 }
 
@@ -19,13 +52,13 @@ resource "aws_launch_configuration" "as_conf" {
  * Autoscaling Group
  *-------------------------------------------------*/
 resource "aws_autoscaling_group" "web" {
-  min_size = 2
-  max_size = 6
-  health_check_type = "ELB"
+  min_size = "${var.asg_min}"
+  max_size = "${var.asg_max}"
+  health_check_type = "${var.asg_healthcheck_type}"
   launch_configuration = "${aws_launch_configuration.as_conf.name}"
-  load_balancers = ["${aws_elb.web_lb.id}"]
-  min_elb_capacity = 2
-  vpc_zone_identifier = ["${split(",", module.network.private_ids)}"]
+  load_balancers = ["${var.elb_id}"]
+  min_elb_capacity = "${var.asg_min_elb_capacity}"
+  vpc_zone_identifier = ["${split(",", var.private_subnets)}"]
 
   tag {
     key = "role"
@@ -55,7 +88,7 @@ resource "aws_autoscaling_policy" "add_capacity" {
   name = "AddCapacityPolicy"
   scaling_adjustment = 1
   adjustment_type = "ChangeInCapacity"
-  cooldown = 120
+  cooldown = "${var.asg_cooldown}"
   autoscaling_group_name = "${aws_autoscaling_group.web.name}"
 }
 
@@ -63,7 +96,7 @@ resource "aws_autoscaling_policy" "remove_capacity" {
   name = "RemoveCapacityPolicy"
   scaling_adjustment = -1
   adjustment_type = "ChangeInCapacity"
-  cooldown = 120
+  cooldown = "${var.asg_cooldown}"
   autoscaling_group_name = "${aws_autoscaling_group.web.name}"
 }
 
@@ -101,3 +134,5 @@ resource "aws_cloudwatch_metric_alarm" "remove_capacity" {
   alarm_description = "This metric monitor ec2 cpu utilization"
   alarm_actions = ["${aws_autoscaling_policy.remove_capacity.arn}"]
 }
+
+output "id" {value = "${aws_autoscaling_group.web.id}"}

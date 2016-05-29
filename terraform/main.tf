@@ -62,5 +62,24 @@ resource "aws_key_pair" "private" {
  module "codedeploy" {
    source = "modules/codedeploy"
    app_name = "${var.app_name}"
+   asg_id = "${module.asg.id}"
    group_name = "web"
  }
+
+/*--------------------------------------------------
+* Autoscaling Group
+*-------------------------------------------------*/
+module "asg" {
+  source = "modules/autoscaling"
+
+  ec2_ami = "${lookup(var.aws_linux_amis_ebs, var.region)}"
+  ec2_key = "${aws_key_pair.private.id}"
+  ec2_security_groups = "${module.network.vpc_sg},${aws_security_group.web.id}"
+  ec2_userdata_script = "scripts/userdata.sh"
+
+  elb_id = "${aws_elb.web_lb.id}"
+  private_subnets = "${module.network.private_ids}"
+
+  app_name = "${var.app_name}"
+  environment = "${var.environment}"
+}
