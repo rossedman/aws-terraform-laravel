@@ -10,6 +10,8 @@ terraform apply
 # create bucket if it doesn't exist
 aws s3 mb s3://testapp.storage --region us-west-2
 
+# update load balancer name in config/common_functions.sh
+
 # set deploy variables
 git config aws-codedeploy.application-name <app_name>
 git config aws-codedeploy.s3bucket testapp.storage
