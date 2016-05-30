@@ -17,5 +17,9 @@ hooks:
   ApplicationStart:
     - location: config/ansible_run.sh
       runas: root
+    - location: config/database_migrate.sh
+      runas: ec2-user
+    - location: config/artisan_optimize.sh
+      runas: ec2-user
     - location: config/register_with_elb.sh
       runas: root

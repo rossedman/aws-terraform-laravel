@@ -88,6 +88,16 @@
               "autoscaling:UpdateAutoScalingGroup"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "sqs:SendMessage",
+              "sqs:ReceiveMessage",
+              "sqs:DeleteMessage",
+              "sqs:ChangeMessageVisibility"
+            ],
+            "Resource": "*"
         }
     ]
 }

@@ -107,6 +107,10 @@ resource "aws_elb" "web_lb" {
 module "asg" {
   source = "modules/autoscaling"
 
+  asg_min = 4
+  asg_max = 8
+  asg_cooldown = 500
+
   ec2_ami = "${lookup(var.aws_linux_amis_ebs, var.region)}"
   ec2_key = "${aws_key_pair.private.id}"
   ec2_security_groups = "${module.network.vpc_sg},${aws_security_group.web.id}"
@@ -160,4 +164,11 @@ module "memcached" {
 
   app_name = "${var.app_name}"
   environment = "${var.environment}"
+}
+
+/*--------------------------------------------------
+ * SQS
+ *-------------------------------------------------*/
+resource "aws_sqs_queue" "terraform_queue" {
+  name = "${var.app_name}-queue"
 }
