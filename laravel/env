@@ -16,3 +16,6 @@ QUEUE_DRIVER=sync
 
 MEMCACHED_HOST=cache.rossedman.internal
 MEMCACHED_PORT=11211
+
+AWS_S3_BUCKET=testapp.storage
+AWS_REGSION=us-west-2

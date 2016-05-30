@@ -26,15 +26,18 @@ git config aws-codedeploy.deployment-group <group_name>
 
 ## TODO
 
-- [ ] Add Elasticache Cluster
-- [ ] Add CloudFront
 - [X] Finish installing CloudTrail agent (http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html)
 - [X] ELB Register/Deregister : ASG Standby
+- [X] Add Elasticache Cluster
+- [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory
-- [ ] Customize CloudTrail logs
+- [ ] Send laravel.log to CloudTrail
 - [ ] Add NACL to VPC
-- [ ] Add frontend build process to app
+- [ ] Add frontend build process to app (Gulp & NPM)
 - [ ] Build out app
-- [ ] Tighten down policies
-- [ ] Make security groups more dynamic
+- [ ] S3/Laravel Filesystem Setup
+- [ ] SQS/Laravel Queue Setup
+- [ ] Integration Tests / CodeDeploy Hooks
+- [ ] Memcached / Laravel Cache Test Endpoints
+- [ ] Make Ansible playbook more dynamic
