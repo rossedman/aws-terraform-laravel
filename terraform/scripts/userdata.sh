@@ -18,8 +18,14 @@ chmod +x /home/ec2-user/install
 /home/ec2-user/install auto
 
 # Install Cloudwatch Agent
-yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https
+yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https zip unzip
+curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip -O
+unzip CloudWatchMonitoringScripts-1.2.1.zip
+rm CloudWatchMonitoringScripts-1.2.1.zip
+mv /tmp/aws-scripts-mon /root/aws-scripts-mon
+
+# Setup Cloudwatch cron for memory and disk
 crontab -l > mycron
-echo '*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron' >> mycron
+echo '*/5 * * * * /root/aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron' >> mycron
 crontab mycron
 rm mycron
