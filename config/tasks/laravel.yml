@@ -1,0 +1,16 @@
+---
+- name: change apache document root
+  lineinfile: dest=/etc/httpd/conf/httpd.conf regexp='^DocumentRoot "/var/www/html"' line='DocumentRoot "/var/www/html/public"'
+
+- name: ensure laravel directories exists
+  file: path={{item}} state=directory recurse=yes
+  with_items:
+    - /var/www/html/bootstrap/cache
+    - /var/www/html/storage/logs
+
+- name: ensure laravel log exists
+  file: path=/var/www/html/storage/logs/laravel.log state=touch mode=0777
+
+# mkdir -p /var/www/html/storage/logs
+# touch /var/www/html/storage/logs/laravel.log
+# chmod 0777 /var/www/html/storage/logs/laravel.log

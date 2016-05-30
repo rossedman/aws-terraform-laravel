@@ -1,0 +1,25 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  vars:
+    aws_region: us-west-2
+  tasks:
+    - name: install php/apache
+      include: tasks/php.yml
+
+    - name: install composer
+      include: tasks/composer.yml
+
+    - name: install cloudwatch agent
+      include: tasks/cloudwatch.yml
+
+    - name: set permissions for deployment
+      file: path=/var/www owner=ec2-user group=apache mode=0755 recurse=yes
+
+    - name: install composer packages
+      composer: command=install working_dir=/var/www/html
+      become_user: ec2-user
+
+    - name: restart apache
+      service: name=httpd state=restarted

@@ -1,0 +1,16 @@
+---
+- name: download composer installer
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/composer-installer.php
+    mode: 0755
+
+- name: run composer installer
+  command: >
+    php composer-installer.php
+    chdir=/tmp
+
+- name: make composer global
+  shell: >
+    mv /tmp/composer.phar /usr/local/bin/composer
+    creates=/usr/local/bin/composer

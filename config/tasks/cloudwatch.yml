@@ -1,0 +1,15 @@
+---
+- name: install cloudwatch logs agent
+  yum: name=awslogs
+
+- name: add region to config
+  lineinfile:
+    dest: /etc/awslogs/awscli.conf
+    regexp: ^region
+    line: region = {{ aws_region }}
+
+- name: configure cloudwatch logs
+  template: src=/tmp/config/templates/awslogs.conf dest=/etc/awslogs/awslogs.conf
+
+- name: start cloudwatch agent
+  service: name=awslogs state=restarted enabled=true
