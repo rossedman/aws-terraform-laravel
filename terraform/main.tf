@@ -148,3 +148,15 @@ resource "aws_db_instance" "mysql" {
   parameter_group_name = "default.mysql5.6"
   vpc_security_group_ids = ["${aws_security_group.database.id}"]
 }
+
+/*--------------------------------------------------
+ * Elasticache
+ *-------------------------------------------------*/
+/*resource "aws_elasticache_cluster" "bar" {
+  cluster_id = "cluster-example"
+  engine = "memcached"
+  node_type = "cache.m1.small"
+  port = 11211
+  num_cache_nodes = 1
+  parameter_group_name = "default.memcached1.4"
+}*/

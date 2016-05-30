@@ -16,3 +16,15 @@ git config aws-codedeploy.deployment-group <group_name>
 # deploy code to instances
 ./deploy
 ```
+
+# TODO
+
+[ ] Add Elasticache Cluster
+[ ] Add CloudFront
+[ ] Finish installing CloudFront agent
+[ ] Customize CloudFront logs
+[ ] Add NACL to VPC
+[ ] Add frontend build process to app
+[ ] Build out app
+[ ] Tighten down policies
+[ ] Make security groups more dynamic
