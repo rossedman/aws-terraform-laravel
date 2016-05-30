@@ -6,15 +6,6 @@ REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/documen
 # yum install -y jq
 # curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq '.["region"]' -r
 
-# yum install -y ruby aws-cli php56
-# usermod -a -G apache ec2-user
-# chown -R root:apache /var/www
-# chmod 2775 /var/www
-# find /var/www -type d -exec chmod 2775 {} +
-# find /var/www -type f -exec chmod 0664 {} +
-# sudo usermod -a -G apache
-# service httpd start
-
 # Install SSM Agent
 cd /tmp && curl https://amazon-ssm-$REGION.s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm
 yum install -y /tmp/amazon-ssm-agent.rpm
@@ -25,3 +16,10 @@ yum install -y ruby aws-cli
 aws s3 cp s3://aws-codedeploy-$REGION/latest/install /home/ec2-user/install --region $REGION
 chmod +x /home/ec2-user/install
 /home/ec2-user/install auto
+
+# Install Cloudwatch Agent
+yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https
+crontab -l > mycron
+echo '*/5 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron' >> mycron
+crontab mycron
+rm mycron

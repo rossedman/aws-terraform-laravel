@@ -21,8 +21,8 @@ git config aws-codedeploy.deployment-group <group_name>
 
 [ ] Add Elasticache Cluster
 [ ] Add CloudFront
-[ ] Finish installing CloudFront agent
-[ ] Customize CloudFront logs
+[ ] Finish installing CloudTrail agent (http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html)
+[ ] Customize CloudTrail logs
 [ ] Add NACL to VPC
 [ ] Add frontend build process to app
 [ ] Build out app

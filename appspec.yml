@@ -6,11 +6,16 @@ files:
   - source: ./config
     destination: /tmp/config
 hooks:
+  ApplicationStop:
+    - location: config/deregister_from_elb.sh
+      runas: root
+    - location: config/clean_directory.sh
+      runas: root
   BeforeInstall:
-    - location: config/before_install.sh
-      timeout: 300
+    - location: config/ansible_install.sh
       runas: root
   ApplicationStart:
-    - location: config/application_start.sh
-      timeout: 300
+    - location: config/ansible_run.sh
+      runas: root
+    - location: config/register_with_elb.sh
       runas: root

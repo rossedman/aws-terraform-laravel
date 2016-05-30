@@ -69,6 +69,25 @@
                 "s3:AbortMultipartUpload"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+               "elasticloadbalancing:Describe*",
+               "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+               "elasticloadbalancing:RegisterInstancesWithLoadBalancer"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "autoscaling:Describe*",
+              "autoscaling:EnterStandby",
+              "autoscaling:ExitStandby",
+              "autoscaling:UpdateAutoScalingGroup"
+            ],
+            "Resource": "*"
         }
     ]
 }
