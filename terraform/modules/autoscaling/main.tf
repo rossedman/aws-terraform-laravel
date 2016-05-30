@@ -1,9 +1,10 @@
 variable "app_name" {}
-variable "asg_cooldown" {default = 120}
+variable "asg_cooldown" {default = 300}
 variable "asg_healthcheck_type" {default = "ELB"}
 variable "asg_min" {default = 2}
 variable "asg_max" {default = 6}
 variable "asg_min_elb_capacity" {default = 2}
+variable "asg_alarm_period" {default = 120}
 variable "ec2_ami" {}
 variable "ec2_instance_type" {default = "t2.micro"}
 variable "ec2_key" {}
@@ -109,7 +110,7 @@ resource "aws_cloudwatch_metric_alarm" "add_capacity" {
   evaluation_periods = "2"
   metric_name = "CPUUtilization"
   namespace = "AWS/EC2"
-  period = "60"
+  period = "${var.asg_alarm_period}"
   statistic = "Average"
   threshold = "50"
   dimensions {
@@ -125,7 +126,7 @@ resource "aws_cloudwatch_metric_alarm" "remove_capacity" {
   evaluation_periods = "2"
   metric_name = "CPUUtilization"
   namespace = "AWS/EC2"
-  period = "60"
+  period = "${var.asg_alarm_period}"
   statistic = "Average"
   threshold = "30"
   dimensions {

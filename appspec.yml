@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: ./laravel
+  - source: ./app
     destination: /var/www/html
   - source: ./config
     destination: /tmp/config

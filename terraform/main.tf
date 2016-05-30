@@ -89,7 +89,7 @@ resource "aws_elb" "web_lb" {
     unhealthy_threshold = 2
     timeout = 3
     target = "HTTP:80/"
-    interval = 30
+    interval = 60
   }
 
   tags {
@@ -117,4 +117,34 @@ module "asg" {
 
   app_name = "${var.app_name}"
   environment = "${var.environment}"
+}
+
+/*--------------------------------------------------
+ * Database
+ *-------------------------------------------------*/
+resource "aws_db_subnet_group" "mysql" {
+  name = "mysql"
+  description = "Main group of private subnets"
+  subnet_ids = ["${split(",",module.network.private_ids)}"]
+
+  tags {
+    app_name = "${var.app_name}"
+    environment = "${var.environment}"
+  }
+}
+
+resource "aws_db_instance" "mysql" {
+  allocated_storage = 5
+  engine = "mysql"
+  engine_version = "5.6.27"
+  instance_class = "db.t2.micro"
+  name = "${lower(var.app_name)}"
+  username = "admin"
+  password = "password"
+  port = 3306
+  multi_az = true
+  storage_encrypted = false
+  db_subnet_group_name = "${aws_db_subnet_group.mysql.name}"
+  parameter_group_name = "default.mysql5.6"
+  vpc_security_group_ids = ["${aws_security_group.database.id}"]
 }

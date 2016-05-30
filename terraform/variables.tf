@@ -26,6 +26,14 @@ variable "private_key" {
   description = "The public key for private subnet instances"
 }
 
+variable "public_domain" {
+  description = "Public domain that is already registered with Route53"
+}
+
+variable "public_domain_zone_id" {
+  description = "Public domain zone id"
+}
+
 variable "region" {
   description = "The AWS region to create resources in."
 }

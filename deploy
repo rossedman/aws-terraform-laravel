@@ -29,6 +29,7 @@ echo "Pushing $BUNDLE_NAME to s3://${BUCKET_NAME} and registering with applicati
 $AWS deploy push \
   --application-name ${APPLICATION_NAME} \
   --s3-location s3://${BUCKET_NAME}/${BUNDLE_NAME} \
+  --ignore-hidden-files \
   --source .
 
 revision_json="{\"revisionType\":\"S3\",\"s3Location\":{\"bucket\":\"${BUCKET_NAME}\",\"bundleType\":\"zip\",\"key\":\"${BUNDLE_NAME}\"}}"

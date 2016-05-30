@@ -1,0 +1,10 @@
+#!/bin/bash
+
+AWS="/usr/local/bin/aws"
+APPLICATION_NAME=$(git config --get aws-codedeploy.application-name)
+DEPLOYMENT_GROUP=$(git config --get aws-codedeploy.deployment-group)
+BUCKET_NAME=$(git config --get aws-codedeploy.s3bucket)
+BUNDLE_NAME=$(echo $(basename `pwd`).zip)
+LAST_DEPLOY=$($AWS deploy list-deployments --application-name $APPLICATION_NAME --deployment-group $DEPLOYMENT_GROUP  | jq '.["deployments"][0]' -r)
+INFO=$($AWS deploy get-deployment --deployment-id $LAST_DEPLOY)
+echo $INFO | jq '.'
