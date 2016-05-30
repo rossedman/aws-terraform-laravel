@@ -1,0 +1,21 @@
+---
+- name: install php
+  yum: name={{ item }}
+  with_items:
+    - httpd24
+    - php56
+    - php56-common
+    - php56-cli
+    - php56-mbstring
+    - php56-mcrypt
+    - php56-pdo
+    - php56-mysqlnd
+
+- name: configure php
+  lineinfile: dest=/etc/php.ini regexp="^date.timezone" line="date.timezone = America/Chicago"
+
+- name: add ec2-user to apache group
+  user: name=ec2-user groups=apache append=yes
+
+- name: restart apache
+  service: name=httpd state=started

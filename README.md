@@ -1,8 +1,10 @@
+# AWS Terraform PHP Application
 
+## Quickstart
 ```sh
 # deploy infrastructure
-cd terraform
-terraform get
+cd terraform && terraform get
+terraform plan
 terraform apply
 
 # create bucket if it doesn't exist
@@ -15,9 +17,12 @@ git config aws-codedeploy.deployment-group <group_name>
 
 # deploy code to instances
 ./deploy
+
+# check status of last deployment
+./watch
 ```
 
-# TODO
+## TODO
 
 [ ] Add Elasticache Cluster
 [ ] Add CloudFront
