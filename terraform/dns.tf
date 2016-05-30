@@ -24,3 +24,11 @@ resource "aws_route53_record" "database" {
   records = ["${aws_db_instance.mysql.address}"]
   ttl = 300
 }
+
+resource "aws_route53_record" "cache" {
+  zone_id = "${module.network.dns_zone}"
+  name = "cache.${var.internal_domain}"
+  type = "CNAME"
+  records = ["${replace(module.memcached.endpoint, "/:.*/", "")}"]
+  ttl = 300
+}

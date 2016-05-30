@@ -10,6 +10,9 @@ DB_DATABASE=basicapp
 DB_USERNAME=admin
 DB_PASSWORD=password
 
-CACHE_DRIVER=file
-SESSION_DRIVER=file
+CACHE_DRIVER=memcached
+SESSION_DRIVER=memcached
 QUEUE_DRIVER=sync
+
+MEMCACHED_HOST=cache.rossedman.internal
+MEMCACHED_PORT=11211

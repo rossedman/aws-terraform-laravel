@@ -5,11 +5,13 @@
     - httpd24
     - php56
     - php56-common
+    - php56-devel
     - php56-cli
     - php56-mbstring
     - php56-mcrypt
     - php56-pdo
     - php56-mysqlnd
+    - php56-pecl-memcached
 
 - name: configure php
   lineinfile: dest=/etc/php.ini regexp="^date.timezone" line="date.timezone = America/Chicago"

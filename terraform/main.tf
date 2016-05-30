@@ -142,7 +142,7 @@ resource "aws_db_instance" "mysql" {
   username = "admin"
   password = "password"
   port = 3306
-  multi_az = true
+  multi_az = false
   storage_encrypted = false
   db_subnet_group_name = "${aws_db_subnet_group.mysql.name}"
   parameter_group_name = "default.mysql5.6"
@@ -152,11 +152,12 @@ resource "aws_db_instance" "mysql" {
 /*--------------------------------------------------
  * Elasticache
  *-------------------------------------------------*/
-/*resource "aws_elasticache_cluster" "bar" {
-  cluster_id = "cluster-example"
-  engine = "memcached"
-  node_type = "cache.m1.small"
-  port = 11211
-  num_cache_nodes = 1
-  parameter_group_name = "default.memcached1.4"
-}*/
+module "memcached" {
+  source = "modules/memcached"
+  availability_zones = "${var.availability_zones}"
+  private_subnets = "${module.network.private_ids}"
+  security_groups = "${aws_security_group.cache.id}"
+
+  app_name = "${var.app_name}"
+  environment = "${var.environment}"
+}
