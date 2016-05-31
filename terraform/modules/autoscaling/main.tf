@@ -1,5 +1,6 @@
 variable "app_name" {}
-variable "asg_cooldown" {default = 300}
+variable "asg_cooldown" {default = 600}
+variable "asg_health_check_grace_period" {default = 600}
 variable "asg_healthcheck_type" {default = "ELB"}
 variable "asg_min" {default = 2}
 variable "asg_max" {default = 6}
@@ -58,6 +59,7 @@ resource "aws_autoscaling_group" "web" {
   health_check_type = "${var.asg_healthcheck_type}"
   launch_configuration = "${aws_launch_configuration.as_conf.name}"
   load_balancers = ["${var.elb_id}"]
+  health_check_grace_period = "${var.asg_health_check_grace_period}"
   #min_elb_capacity = "${var.asg_min_elb_capacity}"
   vpc_zone_identifier = ["${split(",", var.private_subnets)}"]
 

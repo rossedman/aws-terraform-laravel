@@ -24,6 +24,40 @@ git config aws-codedeploy.deployment-group <group_name>
 ./watch
 ```
 
+## What Does This Build?
+Here is a list of all pieces that this repo will put in place for a high availability
+Laravel application deployment and lifecycle.
+
+#### Infrastructure
+- virtual private cloud
+- public and private Subnets for each availability zone
+- nat gateways in each private subnet
+- bastion host in one public subnet
+- security groups
+- autoscaling group for web instances
+- elastic load balancer
+- internet gateway
+- routing tables
+- route53 domain setup
+- internal dns zone
+- ec2 userdata
+- rds mysql install with multi-az
+- elasticache memcached cluster
+- codedeploy application
+- codedeploy agent on ec2 instances
+- iam roles and policies
+- internal dns records
+- ssh keys
+
+#### Configuration
+On CodeDeploy, Ansible scripts will be run locally to configure each autoscaled machine.
+This will include this software.
+- apache webserver
+- php 5.6
+- cloudwatch log setup
+- aws-cli
+
+
 ## TODO
 
 - [X] Finish installing CloudTrail agent (http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html)
@@ -39,5 +73,7 @@ git config aws-codedeploy.deployment-group <group_name>
 - [ ] S3/Laravel Filesystem Setup
 - [ ] SQS/Laravel Queue Setup
 - [ ] Integration Tests / CodeDeploy Hooks
-- [ ] Memcached / Laravel Cache Test Endpoints
+- [X] Memcached / Laravel Cache Test Endpoints
 - [ ] Make Ansible playbook more dynamic
+- [ ] Connect Laravel to SES
+- [ ] Add [TrustedProxy?](https://github.com/fideloper/TrustedProxy)
