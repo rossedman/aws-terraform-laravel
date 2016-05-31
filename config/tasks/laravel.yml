@@ -20,3 +20,6 @@
 
 - name: copy apache conf file
   template: src=templates/laravel.conf dest=/etc/httpd/conf.d/vhosts.conf
+
+- name: copy htaccess file
+  template: src=templates/htaccess dest=/var/www/html/public/.htaccess

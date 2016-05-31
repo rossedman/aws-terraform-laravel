@@ -73,29 +73,37 @@
         {
             "Effect": "Allow",
             "Action": [
-               "elasticloadbalancing:Describe*",
-               "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-               "elasticloadbalancing:RegisterInstancesWithLoadBalancer"
+                 "elasticloadbalancing:Describe*",
+                 "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                 "elasticloadbalancing:RegisterInstancesWithLoadBalancer"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-              "autoscaling:Describe*",
-              "autoscaling:EnterStandby",
-              "autoscaling:ExitStandby",
-              "autoscaling:UpdateAutoScalingGroup"
+                "autoscaling:Describe*",
+                "autoscaling:EnterStandby",
+                "autoscaling:ExitStandby",
+                "autoscaling:UpdateAutoScalingGroup"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-              "sqs:SendMessage",
-              "sqs:ReceiveMessage",
-              "sqs:DeleteMessage",
-              "sqs:ChangeMessageVisibility"
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:ChangeMessageVisibility"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
             ],
             "Resource": "*"
         }

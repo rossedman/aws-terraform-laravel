@@ -12,10 +12,14 @@ DB_PASSWORD=password
 
 CACHE_DRIVER=memcached
 SESSION_DRIVER=memcached
-QUEUE_DRIVER=sync
+QUEUE_DRIVER=sqs
 
 MEMCACHED_HOST=cache.rossedman.internal
 MEMCACHED_PORT=11211
 
+AWS_REGION=us-west-2
 AWS_S3_BUCKET=testapp.storage
-AWS_REGSION=us-west-2
+AWS_SQS_QUEUE=basicapp-queue
+AWS_SQS_PREFIX=https://sqs.us-west-2.amazonaws.com/351353229602/
+
+MAIL_DRIVER=ses

@@ -24,9 +24,9 @@ return [
     ],
 
     'ses' => [
-        'key' => env('SES_KEY'),
-        'secret' => env('SES_SECRET'),
-        'region' => 'us-east-1',
+        'key'    => null,
+        'secret' => null,
+        'region' => env('AWS_REGION'),
     ],
 
     'sparkpost' => [
