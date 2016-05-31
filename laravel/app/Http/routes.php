@@ -27,12 +27,11 @@ Route::get('cache/get', function (Cache $cache) {
 });
 
 Route::get('cache/set', function (Cache $cache) {
-    $cache->put('test_key', 'value', 10);
-    return 'Saved to Cache';
+    return $cache->put('test_key', 'value', 10);
 });
 
 Route::get('user/create', function (User $user) {
-    $user->create([
+    return $user->create([
         'name' => 'Ross Edman',
         'email' => 'ross.edman@slalom.com',
         'password' => 'password'
@@ -41,4 +40,20 @@ Route::get('user/create', function (User $user) {
 
 Route::get('user/get', function (User $user) {
     return $user->all();
+});
+
+Route::get('session/store', function() {
+    return session(['test' => 'session']);
+});
+
+Route::get('session/get', function() {
+    return session('test');
+});
+
+Route::get('filesystem/test', function() {
+    return Storage::disk('s3')->files('/');
+});
+
+Route::get('jobs/test', function (User $user) {
+    return dispatch(new App\Jobs\TestQueue($user));
 });

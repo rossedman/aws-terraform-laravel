@@ -170,5 +170,5 @@ module "memcached" {
  * SQS
  *-------------------------------------------------*/
 resource "aws_sqs_queue" "terraform_queue" {
-  name = "${var.app_name}-queue"
+  name = "${lower(var.app_name)}-queue"
 }

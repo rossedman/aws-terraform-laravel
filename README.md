@@ -57,23 +57,22 @@ This will include this software.
 - cloudwatch log setup
 - aws-cli
 
-
 ## TODO
 
 - [X] Finish installing CloudTrail agent (http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/mon-scripts.html)
 - [X] ELB Register/Deregister : ASG Standby
 - [X] Add Elasticache Cluster
+- [X] S3/Laravel Filesystem Setup
+- [X] SQS/Laravel Queue Setup
+- [X] Send laravel.log to CloudTrail
+- [X] Memcached / Laravel Cache Test Endpoints
+- [ ] Connect Laravel to SES
 - [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory
-- [X] Send laravel.log to CloudTrail
 - [ ] Add NACL to VPC
 - [ ] Add frontend build process to app (Gulp & NPM)
 - [ ] Build out app
-- [ ] S3/Laravel Filesystem Setup
-- [ ] SQS/Laravel Queue Setup
 - [ ] Integration Tests / CodeDeploy Hooks
-- [X] Memcached / Laravel Cache Test Endpoints
 - [ ] Make Ansible playbook more dynamic
-- [ ] Connect Laravel to SES
 - [ ] Add [TrustedProxy?](https://github.com/fideloper/TrustedProxy)
