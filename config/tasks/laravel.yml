@@ -1,16 +1,22 @@
 ---
-- name: change apache document root
-  lineinfile: dest=/etc/httpd/conf/httpd.conf regexp='^DocumentRoot "/var/www/html"' line='DocumentRoot "/var/www/html/public"'
+# - name: change apache document root
+#   lineinfile: dest=/etc/httpd/conf/httpd.conf regexp='^DocumentRoot "/var/www/html"' line='DocumentRoot "/var/www/html/public"'
 
 - name: ensure laravel directories exists
-  file: path={{item}} state=directory recurse=yes
+  file: path={{item}} state=directory recurse=yes mode=0777 owner=ec2-user group=apache
   with_items:
     - /var/www/html/bootstrap/cache
     - /var/www/html/storage/logs
+    - /var/www/html/storage/app/public
+    - /var/www/html/storage/framework/cache
+    - /var/www/html/storage/framework/sessions
+    - /var/www/html/storage/framework/views
 
 - name: ensure laravel log exists
   file: path=/var/www/html/storage/logs/laravel.log state=touch mode=0777
 
-# mkdir -p /var/www/html/storage/logs
-# touch /var/www/html/storage/logs/laravel.log
-# chmod 0777 /var/www/html/storage/logs/laravel.log
+- name: copy env file
+  copy: src=/var/www/html/env dest=/var/www/html/.env remote_src=true owner=apache group=apache
+
+- name: copy apache conf file
+  template: src=templates/laravel.conf dest=/etc/httpd/conf.d/vhosts.conf

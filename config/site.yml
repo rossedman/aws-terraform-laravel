@@ -17,6 +17,9 @@
     - name: set permissions for deployment
       file: path=/var/www owner=ec2-user group=apache mode=0755 recurse=yes
 
+    - name: setup laravel deployment
+      include: tasks/laravel.yml
+
     - name: install composer packages
       composer: command=install working_dir=/var/www/html
       become_user: ec2-user

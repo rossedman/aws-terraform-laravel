@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: ./app
+  - source: ./laravel
     destination: /var/www/html
   - source: ./config
     destination: /tmp/config
@@ -17,5 +17,9 @@ hooks:
   ApplicationStart:
     - location: config/ansible_run.sh
       runas: root
+    - location: config/database_migrate.sh
+      runas: ec2-user
+    - location: config/artisan_optimize.sh
+      runas: ec2-user
     - location: config/register_with_elb.sh
       runas: root

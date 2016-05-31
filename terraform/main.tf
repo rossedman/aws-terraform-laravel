@@ -107,6 +107,10 @@ resource "aws_elb" "web_lb" {
 module "asg" {
   source = "modules/autoscaling"
 
+  asg_min = 4
+  asg_max = 8
+  asg_cooldown = 500
+
   ec2_ami = "${lookup(var.aws_linux_amis_ebs, var.region)}"
   ec2_key = "${aws_key_pair.private.id}"
   ec2_security_groups = "${module.network.vpc_sg},${aws_security_group.web.id}"
@@ -142,7 +146,7 @@ resource "aws_db_instance" "mysql" {
   username = "admin"
   password = "password"
   port = 3306
-  multi_az = true
+  multi_az = false
   storage_encrypted = false
   db_subnet_group_name = "${aws_db_subnet_group.mysql.name}"
   parameter_group_name = "default.mysql5.6"
@@ -152,11 +156,19 @@ resource "aws_db_instance" "mysql" {
 /*--------------------------------------------------
  * Elasticache
  *-------------------------------------------------*/
-/*resource "aws_elasticache_cluster" "bar" {
-  cluster_id = "cluster-example"
-  engine = "memcached"
-  node_type = "cache.m1.small"
-  port = 11211
-  num_cache_nodes = 1
-  parameter_group_name = "default.memcached1.4"
-}*/
+module "memcached" {
+  source = "modules/memcached"
+  availability_zones = "${var.availability_zones}"
+  private_subnets = "${module.network.private_ids}"
+  security_groups = "${aws_security_group.cache.id}"
+
+  app_name = "${var.app_name}"
+  environment = "${var.environment}"
+}
+
+/*--------------------------------------------------
+ * SQS
+ *-------------------------------------------------*/
+resource "aws_sqs_queue" "terraform_queue" {
+  name = "${var.app_name}-queue"
+}
