@@ -32,7 +32,7 @@ git config aws-codedeploy.deployment-group <group_name>
 - [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory
-- [ ] Send laravel.log to CloudTrail
+- [X] Send laravel.log to CloudTrail
 - [ ] Add NACL to VPC
 - [ ] Add frontend build process to app (Gulp & NPM)
 - [ ] Build out app
