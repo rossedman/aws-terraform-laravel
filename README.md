@@ -1,5 +1,11 @@
 # AWS Terraform PHP Application
 
+## Prerequisites
+
+- AWS account with administrative access
+- Route53 Domain (verified in SES for emails too)
+- [Terraform](http://terraform.io)
+
 ## Quickstart
 ```sh
 # deploy infrastructure
@@ -8,7 +14,7 @@ terraform plan
 terraform apply
 
 # create bucket if it doesn't exist
-aws s3 mb s3://testapp.storage --region us-west-2
+aws s3 mb s3://testapp.storage --region <region>
 
 # update load balancer name in config/common_functions.sh
 
@@ -16,6 +22,9 @@ aws s3 mb s3://testapp.storage --region us-west-2
 git config aws-codedeploy.application-name <app_name>
 git config aws-codedeploy.s3bucket testapp.storage
 git config aws-codedeploy.deployment-group <group_name>
+
+# update environment variables
+nano ./laravel/env
 
 # deploy code to instances
 ./deploy
@@ -66,7 +75,7 @@ This will include this software.
 - [X] SQS/Laravel Queue Setup
 - [X] Send laravel.log to CloudTrail
 - [X] Memcached / Laravel Cache Test Endpoints
-- [ ] Connect Laravel to SES
+- [X] Connect Laravel to SES
 - [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory

@@ -57,3 +57,10 @@ Route::get('filesystem/test', function() {
 Route::get('jobs/test', function (User $user) {
     return dispatch(new App\Jobs\TestQueue($user));
 });
+
+Route::get('email/test', function () {
+    return Mail::send('emails.reminder', [], function ($m) {
+        $m->from('admin@rossedman.me', 'Your Application');
+        $m->to('ross.edman@slalom.com', 'Ross Edman')->subject('Your Reminder!');
+    });
+});
