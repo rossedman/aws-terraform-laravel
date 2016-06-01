@@ -1,2 +1,18 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "variables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+// Header
+
+.header {
+  text-align: center;
+  padding: $padding-large-vertical * 4;
+}
+
+.logo {
+  max-width: 160px;
+  margin: 0 auto;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

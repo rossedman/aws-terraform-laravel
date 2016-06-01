@@ -78,6 +78,7 @@ This will include this software.
 - [X] Connect Laravel to SES
 - [X] Smoke Tests with CodeDeploy Hooks
 - [X] Make Ansible playbook more dynamic
+- [ ] Multi Environment Setup
 - [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory
