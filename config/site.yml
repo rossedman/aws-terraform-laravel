@@ -11,6 +11,11 @@
     composer_install_dir: /usr/local/bin/composer
     php_timezone: America/Chicago
     php_ini: /etc/php.ini
+    aws_logs:
+      - /var/log/messages
+      - /var/log/httpd/error_log
+      - /var/log/httpd/access_log
+      - /var/www/html/storage/logs/laravel.log
 
   handlers:
     - name: start apache
@@ -41,22 +46,40 @@
         - php56-pecl-memcached
 
     - name: configure php
-      lineinfile: dest=/etc/php.ini regexp="^date.timezone" line="date.timezone = America/Chicago"
+      lineinfile: dest={{php_ini}} regexp="^date.timezone" line="date.timezone = {{php_timezone}}"
 
     - name: add ec2-user to apache group
-      user: name=ec2-user groups=apache append=yes
+      user: name=ec2-user groups={{apache_group}} append=yes
 
     - name: set permissions for deployment
-      file: path={{deploy_dir}} owner=ec2-user group=apache mode=0755 recurse=yes
+      file: path={{deploy_dir}} owner=ec2-user group={{apache_group}} mode=0755 recurse=yes
+
+      #------------------------------------
+      # nodejs install
+      #------------------------------------
+
+    # - stat: path=/usr/bin/node
+    #   register: node
+    #
+    # - block:
+    #     - name: install node
+    #       shell: curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
+    #
+    #     - name: install nodejs
+    #       yum: name=nodejs
+    #
+    #   when: not node.stat.exists
+    #
+    # - name: install npm packages
+    #   npm: path={{deploy_dir}}
 
       #------------------------------------
       # composer install
       #------------------------------------
-    - stat: path=/usr/local/bin/composer
+    - stat: path={{composer_install_dir}}
       register: com
 
     - block:
-
         - name: download composer installer
           get_url:
             url: https://getcomposer.org/installer
@@ -70,8 +93,8 @@
 
         - name: make composer global
           shell: >
-            mv /tmp/composer.phar /usr/local/bin/composer
-            creates=/usr/local/bin/composer
+            mv /tmp/composer.phar {{composer_install_dir}}
+            creates={{composer_install_dir}}
 
       when: not com.stat.exists
 
@@ -96,7 +119,7 @@
       when: not larlog.stat.exists
 
     - name: copy env file
-      copy: src={{deploy_dir}}/.env.example dest={{deploy_dir}}/.env remote_src=true owner=apache group=apache
+      copy: src={{deploy_dir}}/.env.deploy dest={{deploy_dir}}/.env remote_src=true owner=apache group=apache
 
     - name: copy apache conf file
       template: src=templates/laravel.conf dest=/etc/httpd/conf.d/vhosts.conf
