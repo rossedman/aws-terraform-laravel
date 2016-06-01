@@ -15,6 +15,9 @@ use App\User;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
 Route::auth();
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/home', 'HomeController@index');
 
 Route::get('test', function () {

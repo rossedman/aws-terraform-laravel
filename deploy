@@ -22,14 +22,14 @@ BUNDLE_NAME=$(echo $(basename `pwd`).zip)
 
 # `aws deploy push` will overwrite the bundle in S3. If you'd rather ensure that you have a unique
 # object for each push, you could, for example, append the commit hash:
-BUNDLE_NAME=$(echo $(basename `pwd`)-$(git log -n 1 --format=%H).zip)
+# BUNDLE_NAME=$(echo $(basename `pwd`)-$(git log -n 1 --format=%H).zip)
 
 # Call `aws deploy push` to create a new revision of the current repo
 echo "Pushing $BUNDLE_NAME to s3://${BUCKET_NAME} and registering with application '${APPLICATION_NAME}'" 1>&2
 $AWS deploy push \
   --application-name ${APPLICATION_NAME} \
   --s3-location s3://${BUCKET_NAME}/${BUNDLE_NAME} \
-  --ignore-hidden-files \
+  #--ignore-hidden-files \
   --source .
 
 revision_json="{\"revisionType\":\"S3\",\"s3Location\":{\"bucket\":\"${BUCKET_NAME}\",\"bundleType\":\"zip\",\"key\":\"${BUNDLE_NAME}\"}}"

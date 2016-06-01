@@ -1,8 +1,0 @@
-{
-    "name": "slalom/codedeploy",
-    "license": "MIT",
-    "require": {
-        "php": ">=5.5.0",
-        "aws/aws-sdk-php": "3.18.14"
-    }
-}
