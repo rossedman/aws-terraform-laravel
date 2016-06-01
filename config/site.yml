@@ -2,27 +2,119 @@
 - hosts: 127.0.0.1
   connection: local
   become: yes
+
   vars:
-    aws_region: us-west-2
-  tasks:
-    - name: install php/apache
-      include: tasks/php.yml
+    apache_owner: apache
+    apache_group: apache
+    deploy_dir: /var/www/html
+    server_name: rossedman.me
+    composer_install_dir: /usr/local/bin/composer
+    php_timezone: America/Chicago
+    php_ini: /etc/php.ini
 
-    - name: install composer
-      include: tasks/composer.yml
-
-    - name: install cloudwatch agent
-      include: tasks/cloudwatch.yml
-
-    - name: set permissions for deployment
-      file: path=/var/www owner=ec2-user group=apache mode=0755 recurse=yes
-
-    - name: setup laravel deployment
-      include: tasks/laravel.yml
-
-    - name: install composer packages
-      composer: command=install working_dir=/var/www/html
-      become_user: ec2-user
+  handlers:
+    - name: start apache
+      service: name=httpd state=started enabled=true
 
     - name: restart apache
-      service: name=httpd state=restarted
+      service: name=httpd state=restarted enabled=true
+
+    - name: restart cloudwatch agent
+      service: name=awslogs state=restarted enabled=true
+
+  tasks:
+      #------------------------------------
+      # php/apache config
+      #------------------------------------
+    - name: install php
+      yum: name={{ item }}
+      with_items:
+        - httpd24
+        - php56
+        - php56-common
+        - php56-devel
+        - php56-cli
+        - php56-mbstring
+        - php56-mcrypt
+        - php56-pdo
+        - php56-mysqlnd
+        - php56-pecl-memcached
+
+    - name: configure php
+      lineinfile: dest=/etc/php.ini regexp="^date.timezone" line="date.timezone = America/Chicago"
+
+    - name: add ec2-user to apache group
+      user: name=ec2-user groups=apache append=yes
+
+    - name: set permissions for deployment
+      file: path={{deploy_dir}} owner=ec2-user group=apache mode=0755 recurse=yes
+
+      #------------------------------------
+      # composer install
+      #------------------------------------
+    - stat: path=/usr/local/bin/composer
+      register: com
+
+    - block:
+
+        - name: download composer installer
+          get_url:
+            url: https://getcomposer.org/installer
+            dest: /tmp/composer-installer.php
+            mode: 0755
+
+        - name: run composer installer
+          command: >
+            php composer-installer.php
+            chdir=/tmp
+
+        - name: make composer global
+          shell: >
+            mv /tmp/composer.phar /usr/local/bin/composer
+            creates=/usr/local/bin/composer
+
+      when: not com.stat.exists
+
+      #------------------------------------
+      # cloudwatch agent
+      #------------------------------------
+    - name: install cloudwatch logs agent
+      yum: name=awslogs
+
+    - name: configure cloudwatch logs
+      template: src=/tmp/config/templates/awslogs.conf dest=/etc/awslogs/awslogs.conf
+      notify: restart cloduwatch agent
+
+      #------------------------------------
+      # laravel configuration
+      #------------------------------------
+    - stat: path={{deploy_dir}}/storage/logs/laravel.log
+      register: larlog
+
+    - name: ensure laravel log exists
+      file: path={{deploy_dir}}/storage/logs/laravel.log state=touch mode=0777
+      when: not larlog.stat.exists
+
+    - name: copy env file
+      copy: src={{deploy_dir}}/.env.example dest={{deploy_dir}}/.env remote_src=true owner=apache group=apache
+
+    - name: copy apache conf file
+      template: src=templates/laravel.conf dest=/etc/httpd/conf.d/vhosts.conf
+      notify: restart apache
+
+    - name: install composer packages
+      composer: command=install working_dir={{deploy_dir}}
+      become_user: ec2-user
+
+  post_tasks:
+    - name: set file perms to 0644
+      file: path={{deploy_dir}} mode=0644 recurse=yes owner=apache group=apache
+
+    - name: set directories perms to 0755
+      file: path={{deploy_dir}} mode="u=rwX,g=rX,o=rX" recurse=yes owner=apache group=apache
+
+    - name: set bootstrap perms to 0755
+      file: path={{deploy_dir}}/bootstrap/cache mode=0775 recurse=yes
+
+    - name: set storage perms to 0777
+      file: path={{deploy_dir}}/storage owner=apache group=apache mode=0777 recurse=yes

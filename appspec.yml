@@ -7,19 +7,20 @@ files:
     destination: /tmp/config
 hooks:
   ApplicationStop:
-    - location: config/deregister_from_elb.sh
+    - location: hooks/deregister_from_elb.sh
       runas: root
-    - location: config/clean_directory.sh
+    - location: hooks/clean_directory.sh
       runas: root
   BeforeInstall:
-    - location: config/ansible_install.sh
+    - location: hooks/ansible_install.sh
+      runas: root
+  AfterInstall:
+    - location: hooks/ansible_run.sh
       runas: root
   ApplicationStart:
-    - location: config/ansible_run.sh
-      runas: root
-    - location: config/database_migrate.sh
+    - location: hooks/database_migrate.sh
       runas: ec2-user
-    - location: config/artisan_optimize.sh
+    - location: hooks/artisan_optimize.sh
       runas: ec2-user
-    - location: config/register_with_elb.sh
+    - location: hooks/register_with_elb.sh
       runas: root
