@@ -29,7 +29,7 @@
 
     <div class="container">
         <div class="header">
-          <div class="logo"><img src="images/logo.png" alt=""></div>
+          <div class="logo"><img src="./images/logo.png" alt=""></div>
         </div>
         <div class="body">
           @yield('content')
