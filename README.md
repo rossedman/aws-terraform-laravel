@@ -78,11 +78,11 @@ This will include this software.
 - [X] Connect Laravel to SES
 - [X] Smoke Tests with CodeDeploy Hooks
 - [X] Make Ansible playbook more dynamic
+- [X] Add NACL to VPC
+- [ ] Add frontend build process to app (Gulp & NPM)
+- [ ] Build out app
 - [ ] Multi Environment Setup
 - [ ] Add CloudFront
 - [ ] DNS Failover when instances are down
 - [ ] Set autoscaling policy to read memory
-- [ ] Add NACL to VPC
-- [ ] Add frontend build process to app (Gulp & NPM)
-- [ ] Build out app
 - [ ] Add [TrustedProxy?](https://github.com/fideloper/TrustedProxy)

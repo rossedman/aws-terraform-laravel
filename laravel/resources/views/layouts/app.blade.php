@@ -9,27 +9,17 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Neuton:400,400italic,700,800' rel='stylesheet' type='text/css'>
 
     <!-- Styles -->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
-
-    <style>
-        body {
-            font-family: 'Muli';
-        }
-
-        .fa-btn {
-            margin-right: 6px;
-        }
-    </style>
 </head>
 <body id="app-layout">
 
     <div class="container">
         <div class="header">
-          <div class="logo"><img src="./images/logo.png" alt=""></div>
+          <div class="logo"><img src="images/logo.png" alt=""></div>
         </div>
         <div class="body">
           @yield('content')

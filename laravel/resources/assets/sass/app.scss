@@ -2,7 +2,6 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 // Header
-
 .header {
   text-align: center;
   padding: $padding-large-vertical * 4;
@@ -15,4 +14,17 @@
     width: 100%;
     height: auto;
   }
+}
+
+// Login Panel
+.panel {
+  box-shadow: none!important;
+}
+.panel-login {
+  border: none;
+  background: transparent;
+}
+
+.btn-signup {
+  border-radius: 30px;
 }

@@ -1,8 +1,25 @@
 
-$body-bg:               #e9e5e2 !default;
-
+//== Colors
 $brand-primary:         darken(#0072c8, 6.5%) !default; // #337ab7
 $brand-success:         #A9C12C !default;
 $brand-info:            #60ADB3 !default;
 $brand-warning:         #EEA93F !default;
 $brand-danger:          #F26B3A !default;
+
+//== Basics
+$body-bg:               #e9e5e2 !default;
+$font-family-sans-serif:  'Montserrat', sans-serif !default;
+$font-family-serif:       'Neuton', serif !default;
+
+$border-radius-base:      1px !default;
+$border-radius-large:     1px !default;
+$border-radius-small:     1px !default;
+
+//== Forms
+$input-height-base:       ($line-height-computed + ($padding-base-vertical * 4) + 2) !default;
+$input-height-large:      (ceil($font-size-large * $line-height-large) + ($padding-large-vertical * 4) + 2) !default;
+$input-height-small:      (floor($font-size-small * $line-height-small) + ($padding-small-vertical * 4) + 2) !default;
+
+//== Panels
+$panel-body-padding:          25px !default;
+$panel-heading-padding:       15px 25px !default;

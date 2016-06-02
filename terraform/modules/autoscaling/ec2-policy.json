@@ -106,6 +106,15 @@
                 "ses:SendRawEmail"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codedeploy:Batch*",
+                "codedeploy:Get*",
+                "codedeploy:List*"
+            ],
+            "Resource": "*"
         }
     ]
 }
