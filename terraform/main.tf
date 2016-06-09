@@ -63,6 +63,7 @@ module "codedeploy" {
   source = "modules/codedeploy"
   app_name = "${var.app_name}"
   asg_id = "${module.asg.id}"
+  config_name = "CodeDeployDefault.OneAtATime"
   group_name = "web"
 }
 
